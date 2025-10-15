@@ -19,6 +19,3 @@ jobs:
           fi
           tidy -e index.html
         
-  pull_request:
-    branches:
-      - main
