@@ -1,27 +1,24 @@
-# This is a sample YAML file for a user profile
+name: Github CI pipeline testing the html file
 
-user:
-  id: 12345
-  name: Alice Wonderland
-  email: alice.wonderland@example.com
-  is_active: true
-  roles:
-    - admin
-    - editor
-  address:
-    street: 123 Rabbit Hole
-    city: Wonderland
-    zip_code: 98765
-  preferences:
-    theme: dark
-    notifications:
-      email: true
-      sms: false
-  favorite_colors:
-    - blue
-    - green
-    - purple
-  notes: |
-    This is a multi-line note about Alice's profile.
-    It can contain several lines of text.
-    Indentation is important in YAML.mm
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate HTML file
+        run: |
+          if ! command -v tidy &> /dev/null
+          then
+              echo "tidy could not be found, installing..."
+              sudo apt-get update
+              sudo apt-get install -y tidy
+          fi
+          echo "Validating index.html..."
+          tidy -e index.html
